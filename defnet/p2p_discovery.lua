@@ -30,6 +30,11 @@ function M.create(port)
 	local listen_co
 	local broadcast_co
 
+
+	function instance.getLocalhostIP()
+		return get_ip()
+	end
+
 	--- Start broadcasting a message for others to discover
 	-- @param message
 	-- @return success
@@ -74,7 +79,7 @@ function M.create(port)
 	-- must accept the broadcasting server's IP and port as arguments.
 	-- @return success
 	-- @return error_message
-	function instance.listen(message, callback)
+	function instance.listen( message, callback, stopOnConnect )
 		assert(message, "You must provide a message to listen for")
 		local listener
 		local ok, err = pcall(function()
@@ -94,7 +99,9 @@ function M.create(port)
 				local data, server_ip, server_port = listener:receivefrom()
 				if data and data == message then
 					callback(server_ip, server_port)
-					state = STATE_DISCONNECTED
+					if stopOnConnect then 
+						state = STATE_DISCONNECTED
+					end
 					break
 				end
 				--print("listening")
