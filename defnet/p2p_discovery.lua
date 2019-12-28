@@ -103,8 +103,8 @@ function M.create(port)
 					callback(server_ip, server_port)
 					if stopOnConnect then 
 						state = STATE_DISCONNECTED
+						break
 					end
-					break
 				end
 				--print("listening")
 				coroutine.yield()
