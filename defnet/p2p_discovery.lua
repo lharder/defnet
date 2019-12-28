@@ -81,6 +81,8 @@ function M.create(port)
 	-- @return error_message
 	function instance.listen( message, callback, stopOnConnect )
 		assert(message, "You must provide a message to listen for")
+		if stopOnConnect == nil then stopOnConnect = false end
+		
 		local listener
 		local ok, err = pcall(function()
 			listener = socket.udp()
