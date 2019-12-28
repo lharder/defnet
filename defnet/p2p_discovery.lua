@@ -64,6 +64,7 @@ function M.create(port)
 					print("DISCONNECTED")
 					state = STATE_DISCONNECTED
 				else
+					-- print("broadcasting")
 					coroutine.yield()
 				end
 			end
@@ -79,10 +80,8 @@ function M.create(port)
 	-- must accept the broadcasting server's IP and port as arguments.
 	-- @return success
 	-- @return error_message
-	function instance.listen( message, callback, stopOnConnect )
+	function instance.listen( message, callback )
 		assert(message, "You must provide a message to listen for")
-		if stopOnConnect == nil then stopOnConnect = false end
-		
 		local listener
 		local ok, err = pcall(function()
 			listener = socket.udp()
@@ -101,12 +100,8 @@ function M.create(port)
 				local data, server_ip, server_port = listener:receivefrom()
 				if data and data == message then
 					callback(server_ip, server_port)
-					if stopOnConnect then 
-						state = STATE_DISCONNECTED
-						break
-					end
 				end
-				--print("listening")
+				-- print("listening")
 				coroutine.yield()
 			end
 			listen_co = nil
