@@ -9,6 +9,12 @@ local STATE_DISCONNECTED = "STATE_DISCONNECTED"
 local STATE_BROADCASTING = "STATE_BROADCASTING"
 local STATE_LISTENING = "STATE_LISTENING"
 
+
+local function starts_with( str, start )
+	return str:sub( 1, #start ) == start
+end
+
+
 local function get_ip()
 	for _,network_card in pairs(sys.get_ifaddrs()) do
 		if network_card.up and network_card.address then
@@ -30,10 +36,6 @@ function M.create(port)
 	local listen_co
 	local broadcast_co
 
-
-	function instance.getLocalhostIP()
-		return get_ip()
-	end
 
 	--- Start broadcasting a message for others to discover
 	-- @param message
@@ -98,7 +100,7 @@ function M.create(port)
 			while state == STATE_LISTENING do
 				listener:settimeout(0)
 				local data, server_ip, server_port = listener:receivefrom()
-				if data and data == message then
+				if data and starts_with( data, message ) then
 					callback(server_ip, server_port)
 				end
 				-- print("listening")
