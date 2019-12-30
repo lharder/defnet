@@ -89,7 +89,6 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 			local ok, err = send_queue.send()
 			if not ok and err == "closed" then
 				client.destroy()
-				on_disconnect()
 				return
 			end
 		end
@@ -104,7 +103,6 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 					end
 				elseif err == "closed" then
 					client.destroy()
-					on_disconnect()
 				else
 					break
 				end
@@ -119,6 +117,7 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 		if client_socket then
 			client_socket:close()
 			client_socket = nil
+			on_disconnect()
 		end
 	end
 
