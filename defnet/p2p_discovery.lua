@@ -121,9 +121,7 @@ function M.create(port)
 			if coroutine.status(broadcast_co) == "suspended" then
 				coroutine.resume(broadcast_co)
 			end
-		end
-
-		if listen_co then
+		elseif listen_co then
 			if coroutine.status(listen_co) == "suspended" then
 				coroutine.resume(listen_co)
 			end
