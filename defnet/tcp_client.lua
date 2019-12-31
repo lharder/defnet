@@ -97,7 +97,9 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 			while client_socket do
 				local data, err = client_socket:receive( client.pattern or "*l" )
 				if data then
-					local response = on_data( data, client:getpeername() ) 
+					print( "Peer: " .. client:getpeername() )
+					print( "Socket: " .. client:getsockname() )
+					local response = on_data( data, client:getsockname() ) 
 					if response then
 						client.send(response)
 					end
