@@ -154,7 +154,7 @@ function M.create(port, on_data, on_client_connected, on_client_disconnected)
 			coroutine.wrap(function()
 				local data, err = server.receive(client)
 				if data and on_data then
-					local client_ip, client_port = client:getsockname()
+					local client_ip, client_port = client:getpeername()
 					local response = on_data(data, client_ip, client_port, client, function(response)
 						if not queues[client] then
 							return false
