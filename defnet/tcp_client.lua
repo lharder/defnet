@@ -45,7 +45,7 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 	assert(on_data, "You must provide an on_data callback function")
 	assert(on_disconnect, "You must provide an on_disconnect callback function")
 
-	print("Creating TCP client", server_ip, server_port)
+	print("Creating TCP client for communication with ", server_ip, server_port)
 
 	local client = {
 		pattern = "*l",
@@ -95,9 +95,9 @@ function M.create(server_ip, server_port, on_data, on_disconnect)
 
 		if receivet[client_socket] then
 			while client_socket do
-				local data, err = client_socket:receive(client.pattern or "*l")
+				local data, err = client_socket:receive( client.pattern or "*l" )
 				if data then
-					local response = on_data( data, server_ip, server_port ) 
+					local response = on_data( data, client:getpeername() ) 
 					if response then
 						client.send(response)
 					end
